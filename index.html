@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Activity 6</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <link rel="stylesheet" href="./activity6.css">
+</head>
+<body>
+<div class="container">
+
+    <div class="table-responsive">
+        <table class="table table-striped shadow mt-3">
+            <thead class="bg-info text-white">
+            <tr  style="border-radius: 50%">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Full Address</th>
+            </tr>
+            </thead>
+            <tbody id="table"></tbody>
+            <tfoot>
+            <tr></tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+<script>
+
+
+    let promise = new Promise(function (resolve, reject) {
+        let request = new XMLHttpRequest();
+        request.open('GET', 'https://jsonplaceholder.typicode.com/users');
+        request.onload = function () {
+            if (request.status === 200) {
+                resolve(request.response);
+
+
+            } else {
+                reject(Error(request.statusText));
+            }
+        };
+        request.onerror = function () {
+            reject(Error('Error fetching data.'));
+        };
+        request.send();
+    });
+
+console.log(promise);
+
+    promise.then(function (data) {
+        let users = JSON.parse(data);
+
+        console.log(users);
+        let table = document.getElementById('table');
+        for (let i = 0; i < users.length; i++) {
+            let row = `<tr>
+                            <td>${users[i].name}</td>
+                            <td>${users[i].email}</td>
+                            <td>${users[i].address.street}, ${users[i].address.suite}, ${users[i].address.city}, ${users[i].address.zipcode}</td>
+                        </tr>`;
+            table.innerHTML += row;
+        }
+    }, function (error) {
+        console.log(error);
+    });
+</script>
+
+</body>
+</html>
